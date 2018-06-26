@@ -1,0 +1,27 @@
+version: '3'
+
+services: 
+    # webpage:
+    #     build: ./product
+    #     ports: 9000:9000
+
+    db:
+        # Attempt to initialize database from Dockerfile
+        build: ./resources
+
+        # Attempt to initialize database from compose file
+        # image: postgres:9.4
+        # restart: always
+
+        # Add dump to the docker-entrypoint-initdb.d file. Docker should automatically
+        # build the database from this container.
+        volumes:
+            - ./resources/sidewalk.sql:/docker-entrypoint-initdb.d/sidewalk.sql
+        environment:
+            POSTGRES_USER: "sidewalk"
+            POSTGRES_PASSWORD: "sidewalk"
+            POSTGRES_DB: "sidewalk"
+        ports:
+            - "5432:5432"
+
+
