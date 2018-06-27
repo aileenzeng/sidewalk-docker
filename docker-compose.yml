@@ -1,26 +1,40 @@
 version: '3'
 
 services: 
-    # webpage:
-    #     build: ./product
-    #     ports: 9000:9000
+    # This service is in charge of running Project Sidewalk.
+    # It uses sbt to compile and run the project.
+    website:
+        build: ./website
 
+        # Runs on localhost:9000.
+        ports: 
+            - "9000:9000"
+
+    # This service is in charge of managing the database for Project Sidewalk.
+    # The database that is being used is Postgres with PostGIS extensions.
     db:
-        # Attempt to initialize database from Dockerfile
+        # Run the Dockerfile for the database from the resources folder.
+        # The Dockerfile for the database gets postgres/postgis and copies the files over
+        # to the docker-entrypiont-initdb.d folder.
         build: ./resources
 
-        # Attempt to initialize database from compose file
-        # image: postgres:9.4
-        # restart: always
+        # Add dump to the docker-entrypoint-initdb.d file. Ideally, docker should automatically
+        # build the database from this container. This currently doesn't work.
 
-        # Add dump to the docker-entrypoint-initdb.d file. Docker should automatically
-        # build the database from this container.
+        # Adding a volume mount should make the database persist.
+        # This solution hasn't worked so far :/
+        # https://stackoverflow.com/questions/41637505/how-to-persist-data-in-a-dockerized-postgres-database-using-volumes
         volumes:
             - ./resources/sidewalk.sql:/docker-entrypoint-initdb.d/sidewalk.sql
+            # - ./resources/sidewalk.sql:/var/lib/postgresql/data/sidewalk.sql
+
+        # Sets environment variables (per original Instructions)
         environment:
             POSTGRES_USER: "sidewalk"
             POSTGRES_PASSWORD: "sidewalk"
             POSTGRES_DB: "sidewalk"
+        
+        # Sets the forwarding/guest port. The default port for postgres is 5432.
         ports:
             - "5432:5432"
 
