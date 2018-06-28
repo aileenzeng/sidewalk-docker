@@ -6,14 +6,23 @@
 5. Run `docker exec -it sidewalk-docker_db_1 su - postgres`. Then, type in `createdb -T template0 sidewalk` and `pg_restore -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql`. 
 
 ## Work in Progress
-Current task: getting the website to build (and run)
+This gets the website to run (not correctly!)
 ```
 cd website
 docker build . -t sidewalk-docker_website
+docker run -it -p 9000:9000 -name sidewalk-docker_website sidewalk-docker_website
 ```
-Issues: takes a long time to build and I get this error: `sbt.ResolveException: download failed: javax.media#jai_core;1.1.3!jai_core.jar` ([link](https://github.com/aileenzeng/sidewalk-docker/issues/5) for a more complete log)
 
-I also have not been using `docker-compose up` yet for website.
+`docker-compose up` does not work yet. 
+
+## To check
+Alternate setup commands in Step 5:
+```
+docker exec -it sidewalk-docker_db_1 su - postgres -c "createdb -T template0 sidewalk"
+docker exec -it sidewalk-docker_db_1 su - postgres -c "pg_restore -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql"
+```
+
+This may help streamline the process later on? I haven't done a full setup with the database with these commands yet.
 
 # Helpful commands:
 To check what the state of the database is, run `docker exec -it sidewalk-docker_db_1 psql -U sidewalk` to enter the interactive postgres container.

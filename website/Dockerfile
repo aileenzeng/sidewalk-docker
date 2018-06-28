@@ -42,11 +42,13 @@ COPY ["./SidewalkWebpage/project/plugins.sbt", "./SidewalkWebpage/project/build.
 
 # copy code
 COPY ./SidewalkWebpage /root/app/
+COPY ./docker-entrypoint.sh /root/app/
+
 WORKDIR /root/app
 # RUN sbt compile && sbt test:compile
 
 # This step may not be necessary
-RUN sbt compile
+# RUN sbt compile
 
 # Expose 8888 for the Activator UI
 EXPOSE 8888

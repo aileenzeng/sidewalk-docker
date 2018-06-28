@@ -6,9 +6,25 @@ services:
     website:
         build: ./website
 
+        volumes:
+            # anonymous volume to cache project dependencies
+            # https://stackoverflow.com/questions/3142856/how-to-configure-ivy-cache-directory-per-user-or-system-wide
+
+            # Note from Docker documentation: https://docs.docker.com/compose/compose-file/#volumes-for-services-swarms-and-stack-files
+            # In the absence of having named volumes with specified sources, 
+            # Docker creates an anonymous volume for each task backing a service. 
+            # Anonymous volumes do not persist after the associated containers are removed.
+            - sbt-cache:/root/.ivy2
+
+        depends_on:
+            - db
+
         # Runs on localhost:9000.
         ports: 
             - "9000:9000"
+
+        links:
+            - "db:sidewalk"
 
     # This service is in charge of managing the database for Project Sidewalk.
     # The database that is being used is Postgres with PostGIS extensions.
@@ -38,4 +54,5 @@ services:
         ports:
             - "5432:5432"
 
-
+volumes:
+    sbt-cache:

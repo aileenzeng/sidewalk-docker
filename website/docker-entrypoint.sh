@@ -1,5 +1,4 @@
 #!/bin/bash
-
-echo "I am the entrypoint!!"
-echo "Running sbt run..."
+echo "I am the entrypoint!"
 sbt run
+
