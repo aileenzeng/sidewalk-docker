@@ -20,17 +20,14 @@ RUN apk add --update bash curl openssl ca-certificates && \
   ln -s /opt/sbt/sbt/bin/sbt /usr/bin/sbt && \
   rm -rf /tmp/* /var/cache/apk/*
 
-# Many of these steps below are commented out because I'm not sure about exactly
-# what they do / how they help. Will need to investigate more...
-
 # Prebuild with sbt
-# COPY . /tmp/build/
+COPY . /tmp/build/
 
 # sbt sometimes failed because of network. retry 3 times.
-# RUN cd /tmp/build && \
-#   (sbt compile || sbt compile || sbt compile) && \
-#   (sbt test:compile || sbt test:compile || sbt test:compile) && \
-#   rm -rf /tmp/build
+RUN cd /tmp/build && \
+  (sbt compile || sbt compile || sbt compile) && \
+  (sbt test:compile || sbt test:compile || sbt test:compile) && \
+  rm -rf /tmp/build
 
 # caching dependencies
 COPY ["./SidewalkWebpage/build.sbt", "/tmp/build/"]
@@ -42,17 +39,14 @@ COPY ["./SidewalkWebpage/project/plugins.sbt", "./SidewalkWebpage/project/build.
 
 # copy code
 COPY ./SidewalkWebpage /root/app/
+COPY ./docker-entrypoint.sh /root/app
 WORKDIR /root/app
+
 # RUN sbt compile && sbt test:compile
 
-# This step may not be necessary
-RUN sbt compile
-
-# Expose 8888 for the Activator UI
-EXPOSE 8888
-
-# Expose 9000 to run locally
+# Aileen's changes
 EXPOSE 9000
+# RUN sbt run
 
 ENTRYPOINT ["/root/app/docker-entrypoint.sh"]
 # CMD ["sbt"]

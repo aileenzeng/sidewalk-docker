@@ -13,6 +13,8 @@ docker build . -t sidewalk-docker_website
 ```
 Issues: takes a long time to build and I get this error: `sbt.ResolveException: download failed: javax.media#jai_core;1.1.3!jai_core.jar` ([link](https://github.com/aileenzeng/sidewalk-docker/issues/5) for a more complete log)
 
+I also have not been using `docker-compose up` yet for website.
+
 # Helpful commands:
 To check what the state of the database is, run `docker exec -it sidewalk-docker_db_1 psql -U sidewalk` to enter the interactive postgres container.
 - `\du` to show all users.

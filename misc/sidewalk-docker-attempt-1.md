@@ -1,3 +1,5 @@
+This is the error that I get when I build the image using the (existing) attempt.
+
 ```
 Aileens-MacBook-Pro:SidewalkWebpage aileen$ docker build -t sidewalk/web-app .
 Sending build context to Docker daemon  462.1MB
