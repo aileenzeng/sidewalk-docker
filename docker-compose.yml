@@ -41,6 +41,9 @@ services:
 
         tty: true
 
+    grunt:
+        build: ./grunt
+
     # This service is in charge of managing the database for Project Sidewalk.
     # The database that is being used is Postgres with PostGIS extensions.
     db:

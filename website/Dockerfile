@@ -40,16 +40,16 @@ RUN apk add --update bash curl openssl ca-certificates && \
 #  sbt test:compile && \
 #  rm -rf /tmp/build
 
-# copy code
+# Create working directory
+WORKDIR /root/app
+
+# create a volume mount
 COPY ./SidewalkWebpage /root/app/
 COPY ./docker-entrypoint.sh /root/app/
 
-WORKDIR /root/app
-# RUN sbt compile && sbt test:compile
+RUN sbt compile
 
-# This step may not be necessary?
-# RUN sbt compile
-
+# NOTE: I haven't used the Activator UI, so I'm not sure if this is necessary
 # Expose 8888 for the Activator UI
 EXPOSE 8888
 
