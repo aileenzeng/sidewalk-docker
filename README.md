@@ -63,7 +63,7 @@ The build command in `docker-compose` file lets you run the service from the doc
 
 To fix this, I had to modify the `build.sbt` file in Sidewalk. These changes aren't reflected in this repository since SidewalkWebpage is part of the `.gitignore` file. I haven't tried integrating this change into the Sidewalk repository that is on my computer that isn't running on Docker yet.
 
-This is the updated code for `libraryDependencies`:
+This is the updated code for `libraryDependencies` in `build.sbt`:
 ```
 libraryDependencies ++= Seq(
   jdbc,
@@ -77,4 +77,15 @@ libraryDependencies ++= Seq(
   "org.geotools" % "gt-main" % "14.3",
   "org.geotools" % "gt-referencing" % "14.3" exclude("javax.media", "jai_core")
 ).map(_.force())
+```
+
+### Add database url in `/conf/application.conf`
+This line allows the website service to connect with the Postgres database. The location `db.default.url` is based off an environment variable that is the `docker-compose.yml` file. A more detailed writeup of the initial issue is [here](https://github.com/aileenzeng/sidewalk-docker/issues/8). 
+
+This is the updated code in `application.conf`. This can go below the `db.default.url` that already exists for `localhost:5432`. 
+
+```
+# This is for docker.
+# Pulls the from the DOCKER_DB environment variable from the compose file.
+db.default.url="jdbc:postgresql://"${?DOCKER_DB}"/sidewalk"
 ```
