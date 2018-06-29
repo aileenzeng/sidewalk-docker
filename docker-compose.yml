@@ -5,8 +5,14 @@ services:
     # It uses sbt to compile and run the project.
     website:
         build: ./website
-
         volumes:
+            # TODO: figure out how to create a volume mount for the website... it isn't working :|
+            # TODO: investigate where sidewalk currently is w/ the exec function. I'm pretty sure it's just in 
+            # /root/app, so I'm not sure why this mount isn't working.
+            # This is especially important when we are developing with Sidewalk using Docker. We don't want to be rebuilding
+            # the docker container every time we make a change.
+            # - ./website/SidewalkWebpage:/root/app
+
             # anonymous volume to cache project dependencies
             # https://stackoverflow.com/questions/3142856/how-to-configure-ivy-cache-directory-per-user-or-system-wide
 
@@ -22,9 +28,17 @@ services:
         # Runs on localhost:9000.
         ports: 
             - "9000:9000"
-
+        # Link database service to website
+        # Also can be referenced by sidewalk?
         links:
             - "db:sidewalk"
+
+        # may be unnecessary
+        # I think docker containers still 
+        networks:
+            - back-tier
+
+        tty: true
 
     # This service is in charge of managing the database for Project Sidewalk.
     # The database that is being used is Postgres with PostGIS extensions.
@@ -44,7 +58,7 @@ services:
             - ./resources/sidewalk.sql:/docker-entrypoint-initdb.d/sidewalk.sql
             # - ./resources/sidewalk.sql:/var/lib/postgresql/data/sidewalk.sql
 
-        # Sets environment variables (per original Instructions)
+        # Sets environment variables (per original Instructions)?
         environment:
             POSTGRES_USER: "sidewalk"
             POSTGRES_PASSWORD: "sidewalk"
@@ -54,5 +68,14 @@ services:
         ports:
             - "5432:5432"
 
+        # may be unnecessary    
+        networks:
+            - back-tier
+
+        # TODO: investigate adding commands (so we don't need to deal w/ the extra set of instructions)
+
 volumes:
     sbt-cache:
+
+networks:
+    back-tier:

@@ -33,8 +33,8 @@ RUN apk add --update bash curl openssl ca-certificates && \
 #   rm -rf /tmp/build
 
 # caching dependencies
-COPY ["./SidewalkWebpage/build.sbt", "/tmp/build/"]
-COPY ["./SidewalkWebpage/project/plugins.sbt", "./SidewalkWebpage/project/build.properties", "/tmp/build/project/"]
+# COPY ["./SidewalkWebpage/build.sbt", "/tmp/build/"]
+# COPY ["./SidewalkWebpage/project/plugins.sbt", "./SidewalkWebpage/project/build.properties", "/tmp/build/project/"]
 # RUN cd /tmp/build && \
 #  sbt compile && \
 #  sbt test:compile && \
@@ -47,7 +47,7 @@ COPY ./docker-entrypoint.sh /root/app/
 WORKDIR /root/app
 # RUN sbt compile && sbt test:compile
 
-# This step may not be necessary
+# This step may not be necessary?
 # RUN sbt compile
 
 # Expose 8888 for the Activator UI

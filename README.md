@@ -1,3 +1,5 @@
+NOTE: this `README` is mostly a brain dump of information to help me keep track of different thoughts I've had since starting to work with docker.
+
 # Documentation:
 1. Clone the Project Sidewalk repository into the `website` folder of this directory.
 2. Obtain a database dump. Name it `sidewalk.sql` and place it into the `resources` folder.
@@ -14,6 +16,7 @@ docker run -it -p 9000:9000 -name sidewalk-docker_website sidewalk-docker_websit
 ```
 
 `docker-compose up` does not work yet. 
+`docker-compose up --force-recreate` is sometimes useful when changing environment variables.
 
 ## To check
 Alternate setup commands in Step 5:
@@ -23,6 +26,7 @@ docker exec -it sidewalk-docker_db_1 su - postgres -c "pg_restore -d sidewalk do
 ```
 
 This may help streamline the process later on? I haven't done a full setup with the database with these commands yet.
+These commands could also probably be put into the `docker-compose.yml` file.
 
 # Helpful commands:
 To check what the state of the database is, run `docker exec -it sidewalk-docker_db_1 psql -U sidewalk` to enter the interactive postgres container.
@@ -30,9 +34,17 @@ To check what the state of the database is, run `docker exec -it sidewalk-docker
 - `\dt` to show all relations.
 - `\q` to exit. 
 
-`docker-compose run db bash` lets you run an interactive terminal to see what is happening in the `db` service. 
+`docker inspect <container>` returns a list of low-level information about the container.
+`docker-compose run <service> bash` lets you run an interactive terminal to see what is happening inside a service. 
+- It's helpful to run a ping on `sidewalk` (or `db`, same thing) from the website container.
+```
+docker exec -it sidewalk-docker_website_1 bash
+~/app # ping sidewalk
+```
+- This also allows us to see config files that aren't necessarily visible from outside the docker container. (although these would be tricky to modify)
 
 `docker-compose stop; sudo rm -rf ./data/postgres/` ????  `¯\_(ツ)_/¯`
+
 
 # Useful resources (maybe):
 Docker compose commands:
