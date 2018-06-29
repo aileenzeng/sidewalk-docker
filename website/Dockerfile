@@ -1,4 +1,5 @@
 # Source: https://hub.docker.com/r/ysihaoy/scala-play/
+# Some of the intermediate lines are removed -- I don't think they're important for our purposes
 
 FROM anapsix/alpine-java:jdk8
 MAINTAINER Tianhao Li <ysihaoy@gmail.com>
@@ -20,34 +21,26 @@ RUN apk add --update bash curl openssl ca-certificates && \
   ln -s /opt/sbt/sbt/bin/sbt /usr/bin/sbt && \
   rm -rf /tmp/* /var/cache/apk/*
 
-# Many of these steps below are commented out because I'm not sure about exactly
-# what they do / how they help. Will need to investigate more...
+RUN apk add --update nodejs
 
-# Prebuild with sbt
-# COPY . /tmp/build/
+# Install grunt
+RUN npm install -g bower grunt-cli && \
+    echo '{ "allow_root": true }' > /root/.bowerrc
 
-# sbt sometimes failed because of network. retry 3 times.
-# RUN cd /tmp/build && \
-#   (sbt compile || sbt compile || sbt compile) && \
-#   (sbt test:compile || sbt test:compile || sbt test:compile) && \
-#   rm -rf /tmp/build
-
-# caching dependencies
-# COPY ["./SidewalkWebpage/build.sbt", "/tmp/build/"]
-# COPY ["./SidewalkWebpage/project/plugins.sbt", "./SidewalkWebpage/project/build.properties", "/tmp/build/project/"]
-# RUN cd /tmp/build && \
-#  sbt compile && \
-#  sbt test:compile && \
-#  rm -rf /tmp/build
+# Install from Sidewalk packages (todo: create volume)
+RUN npm install
 
 # Create working directory
 WORKDIR /root/app
 
-# create a volume mount
+# Copy code
 COPY ./SidewalkWebpage /root/app/
 COPY ./docker-entrypoint.sh /root/app/
 
-RUN sbt compile
+# Compiles Scala sources and downloads dependencies. If needed, this line could be changed to 
+# RUN (sbt compile || sbt compile || sbt compile). 
+# This gives scala 3 tries to compile sources, in case there are network connectivity issues
+# RUN sbt compile
 
 # NOTE: I haven't used the Activator UI, so I'm not sure if this is necessary
 # Expose 8888 for the Activator UI
@@ -56,5 +49,6 @@ EXPOSE 8888
 # Expose 9000 to run locally
 EXPOSE 9000
 
+CMD ["sbt"]
 ENTRYPOINT ["/root/app/docker-entrypoint.sh"]
-# CMD ["sbt"]
+

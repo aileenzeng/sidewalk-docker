@@ -7,8 +7,6 @@ services:
         build: ./website
         volumes:
             # TODO: figure out how to create a volume mount for the website... it isn't working :|
-            # TODO: investigate where sidewalk currently is w/ the exec function. I'm pretty sure it's just in 
-            # /root/app, so I'm not sure why this mount isn't working.
             # This is especially important when we are developing with Sidewalk using Docker. We don't want to be rebuilding
             # the docker container every time we make a change.
             # - ./website/SidewalkWebpage:/root/app
@@ -21,6 +19,8 @@ services:
             # Docker creates an anonymous volume for each task backing a service. 
             # Anonymous volumes do not persist after the associated containers are removed.
             - sbt-cache:/root/.ivy2
+            - node-modules:/root/app/node_modules
+            - grunt:/usr/lib/node_modules
 
         # This is called in Sidewalk's application.conf file. This gives the location where the 
         # database can come from
@@ -40,9 +40,6 @@ services:
             - back-tier
 
         tty: true
-
-    grunt:
-        build: ./grunt
 
     # This service is in charge of managing the database for Project Sidewalk.
     # The database that is being used is Postgres with PostGIS extensions.
@@ -80,6 +77,8 @@ services:
 
 volumes:
     sbt-cache:
+    node-modules:
+    grunt:
 
 networks:
     back-tier:

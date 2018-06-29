@@ -1,3 +1,3 @@
 #!/bin/bash
 echo "I am the entrypoint!!"
-sbt run
+grunt concat & grunt concat_css & sbt run
