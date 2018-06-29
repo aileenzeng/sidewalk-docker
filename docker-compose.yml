@@ -22,16 +22,17 @@ services:
             # Anonymous volumes do not persist after the associated containers are removed.
             - sbt-cache:/root/.ivy2
 
+        # This is called in Sidewalk's application.conf file. This gives the location where the 
+        # database can come from
+        environment:
+            DOCKER_DB: db:5432
+
         depends_on:
             - db
 
         # Runs on localhost:9000.
         ports: 
             - "9000:9000"
-        # Link database service to website
-        # Also can be referenced by sidewalk?
-        links:
-            - "db:sidewalk"
 
         # may be unnecessary
         # I think docker containers still 
