@@ -23,12 +23,11 @@ RUN apk add --update bash curl openssl ca-certificates && \
 
 RUN apk add --update nodejs
 
-# Install grunt
-RUN npm install -g bower grunt-cli && \
-    echo '{ "allow_root": true }' > /root/.bowerrc
+RUN ls
 
-# Install from Sidewalk packages (todo: create volume)
-RUN npm install
+# Install grunt and npm dependencies
+RUN npm install -g grunt-cli
+RUN npm install grunt
 
 # Create working directory
 WORKDIR /root/app
@@ -36,6 +35,10 @@ WORKDIR /root/app
 # Copy code
 COPY ./SidewalkWebpage /root/app/
 COPY ./docker-entrypoint.sh /root/app/
+
+# Install npm dependencies
+RUN npm install
+
 
 # Compiles Scala sources and downloads dependencies. If needed, this line could be changed to 
 # RUN (sbt compile || sbt compile || sbt compile). 

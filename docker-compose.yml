@@ -72,7 +72,7 @@ services:
         # may be unnecessary    
         networks:
             - back-tier
-
+            
         # TODO: investigate adding commands (so we don't need to deal w/ the extra set of instructions)
 
 volumes:

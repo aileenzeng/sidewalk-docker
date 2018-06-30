@@ -5,23 +5,13 @@ NOTE: this `README` is mostly a brain dump of information to help me keep track 
 2. Obtain a database dump. Name it `sidewalk.sql` and place it into the `resources` folder.
 3. Run `docker-compose build`. This builds all the `Dockerfiles` in each service.
 4. Run `docker-compose up -d db`. You may need to run this twice (?) until the message says '`Starting sidewalk-docker_db_1 ... done`'. (For some reason, `docker-compose up` isn't working?)
-5. Run `docker exec -it sidewalk-docker_db_1 su - postgres`. Then, type in `createdb -T template0 sidewalk` and `pg_restore -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql`. 
+5. Run `docker exec -it sidewalk-docker_db_1 su - postgres -c "createdb -T template0 sidewalk"` then `docker exec -it sidewalk-docker_db_1 su - postgres -c "pg_restore -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql"`. 
 6. After the database is created, run `docker-compose up`. (If this doesn't work, maybe try `docker-compose up --force-recreate`)
 
 ## Current tasks
 1. See if there is a way to speed up website loading times. (Takes 2-3 minutes, even after the first build)
 2. Streamline the database setup process
 3. Create volumes for the database and website.
-
-Lower priority, but still important:
-1. Integrate `grunt` somehow, somewhere. Not sure if `grunt` should be a separate service, or if it should be part of the website service?
-
-## To check
-Alternate setup commands in Step 5:
-```
-docker exec -it sidewalk-docker_db_1 su - postgres -c "createdb -T template0 sidewalk"
-docker exec -it sidewalk-docker_db_1 su - postgres -c "pg_restore -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql"
-```
 
 This may help streamline the process later on? I haven't done a full setup with the database with these commands yet.
 These commands could also probably be put into the `docker-compose.yml` file.
