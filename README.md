@@ -3,13 +3,13 @@ NOTE: this `README` is mostly a brain dump of information to help me keep track 
 # Documentation:
 1. Clone the Project Sidewalk repository into the `website` folder of this directory.
 2. Obtain a database dump. Name it `sidewalk.sql` and place it into the `resources` folder.
-3. Run `docker-compose build`. This builds all the `Dockerfiles` in each service.
+3. Run `docker-compose build` in the project's root directory. This builds all the `Dockerfiles` in each service.
 4. Run `docker-compose up -d db`. You may need to run this twice (?) until the message says '`Starting sidewalk-docker_db_1 ... done`'. (For some reason, `docker-compose up` isn't working?)
-5. Run `docker exec -it sidewalk-docker_db_1 su - postgres -c "createdb -T template0 sidewalk"` then `docker exec -it sidewalk-docker_db_1 su - postgres -c "pg_restore -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql"`. 
+5. Run `docker exec -it sidewalk-docker_db_1 su - postgres -c "createdb -T template0 sidewalk"` then `docker exec -it sidewalk-docker_db_1 su - postgres -c "pg_restore -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql"`. This step may take a while. Once this step is complete, there will be a message that says "Warning: 2 errors after pg_restore" - this is normal!
 6. After the database is created, run `docker-compose up`. (If this doesn't work, maybe try `docker-compose up --force-recreate`)
 
 ## Current tasks
-1. See if there is a way to speed up website loading times. (Takes 2-3 minutes, even after the first build)
+1. See if there is a way to speed up website loading times. (Sometimes takes 2-3 minutes, even after the first build)
 2. Streamline the database setup process
 3. Create volumes for the database and website.
 4. Try setting up Sidewalk on different computers
@@ -18,6 +18,13 @@ This may help streamline the process later on? I haven't done a full setup with 
 These commands could also probably be put into the `docker-compose.yml` file.
 
 # Helpful commands:
+`docker rm $(docker ps -a -q)` deletes all containers (note: if the database container is deleted, then any changes since the dump will not be saved)
+
+`docker rmi $(docker images -q)` deletes all images
+
+`docker kill <container id>` kills an active container
+
+
 To check what the state of the database is, run `docker exec -it sidewalk-docker_db_1 psql -U sidewalk` to enter the interactive postgres container.
 - `\du` to show all users.
 - `\dt` to show all relations.
@@ -25,7 +32,7 @@ To check what the state of the database is, run `docker exec -it sidewalk-docker
 
 `docker inspect <container>` returns a list of low-level information about the container.
 `docker-compose run <service> bash` lets you run an interactive terminal to see what is happening inside a service. 
-- It's helpful to run a ping on `sidewalk` (or `db`, same thing) from the website container.
+- It's helpful to ping `sidewalk` (or `db`, same thing) from the website container to make sure that they are connected.
 ```
 docker exec -it sidewalk-docker_website_1 bash
 ~/app # ping sidewalk
