@@ -1,6 +1,7 @@
 NOTE: this `README` is mostly a brain dump of information to help me keep track of different thoughts I've had since starting to work with docker.
 
 # Documentation:
+1. Install Docker. I am using the Community Edition, version 18.03.1 (although having the exact same version is probably less important). The download link is [here](https://store.docker.com/search?type=edition&offering=community). You can check to see if Docker is running by typing `docker --version`. 
 1. Clone the Project Sidewalk repository into the `website` folder of this directory.
 2. Obtain a database dump. Name it `sidewalk.sql` and place it into the `resources` folder.
 3. Run `docker-compose build` in the project's root directory. This builds all the `Dockerfiles` in each service.
