@@ -12,6 +12,7 @@ NOTE: this `README` is mostly a brain dump of information to help me keep track 
 1. See if there is a way to speed up website loading times. (Takes 2-3 minutes, even after the first build)
 2. Streamline the database setup process
 3. Create volumes for the database and website.
+4. Try setting up Sidewalk on different computers
 
 This may help streamline the process later on? I haven't done a full setup with the database with these commands yet.
 These commands could also probably be put into the `docker-compose.yml` file.
