@@ -1,6 +1,7 @@
 NOTE: this `README` is mostly a brain dump of information to help me keep track of different thoughts I've had since starting to work with docker.
 
 # Documentation:
+## Setup
 1. Install Docker. I am using the Community Edition, version 18.03.1 (although having the exact same version is probably less important). The download link is [here](https://store.docker.com/search?type=edition&offering=community). You can check to see if Docker is running by typing `docker --version`. 
 1. Clone the Project Sidewalk repository into the `website` folder of this directory. Check out the `593-sidewalk-docker` branch.
 2. Obtain a database dump. Name it `sidewalk.sql` and place it into the `resources` folder.
@@ -8,6 +9,10 @@ NOTE: this `README` is mostly a brain dump of information to help me keep track 
 4. Run `docker-compose up -d db`. You may need to run this twice (?) until the message says '`Starting sidewalk-docker_db_1 ... done`'. (For some reason, `docker-compose up` isn't working?)
 5. Run `docker exec -it sidewalk-docker_db_1 su - postgres -c "createdb -T template0 sidewalk"` then `docker exec -it sidewalk-docker_db_1 su - postgres -c "pg_restore -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql"`. This step may take a while. Once this step is complete, there will be a message that says "Warning: 2 errors after pg_restore" - this is normal!
 6. After the database is created, run `docker-compose up`. (If this doesn't work, maybe try `docker-compose up --force-recreate`)
+
+## Running (after setup)
+1. (Optional): Run `docker-compose build website` if changes were made to SidewalkWebpage
+2. Run `docker-compose up`.
 
 ## Current tasks
 1. See if there is a way to speed up website loading times. (Sometimes takes 2-3 minutes, even after the first build)
