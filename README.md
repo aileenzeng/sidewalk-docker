@@ -1,9 +1,18 @@
 NOTE: this `README` is mostly a brain dump of information to help me keep track of different thoughts I've had since starting to work with docker.
 
 # Documentation:
+## Prequisites
+1. Docker (18.03.1). I am using the Community Edition, version 18.03.1, which can be downloaded [here](https://store.docker.com/search?type=edition&offering=community).
+2. Docker Compose (1.21.1). NOTE: Docker for Windows/Mac already come with Docker Compose. Linux users will need to download compose separately from [here]( https://docs.docker.com/compose/install/).
+
+You to see which Docker version you have installed by running the following commands:
+```
+docker --version
+docker-compose --version
+```
+
 ## Setup
-1. Install Docker. I am using the Community Edition, version 18.03.1 (although having the exact same version is probably less important). The download link is [here](https://store.docker.com/search?type=edition&offering=community). You can check to see if Docker is running by typing `docker --version`. 
-1. Clone the Project Sidewalk repository into the `website` folder of this directory. Check out the `593-sidewalk-docker` branch.
+1. Clone the Project Sidewalk repository into the `website` folder of this directory. Check out the `593-sidewalk-docker` branch for now - this branch contains a few updates to the config files that are needed to make this project work properly with Docker.
 2. Obtain a database dump. Name it `sidewalk.sql` and place it into the `resources` folder.
 3. Run `docker-compose build` in the project's root directory. This builds all the `Dockerfiles` in each service.
 4. Run `docker-compose up -d db`. You may need to run this twice (?) until the message says '`Starting sidewalk-docker_db_1 ... done`'. (For some reason, `docker-compose up` isn't working?)
