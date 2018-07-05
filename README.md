@@ -1,12 +1,63 @@
 NOTE: this `README` is mostly a brain dump of information to help me keep track of different thoughts I've had since starting to work with docker.
 
-# Documentation:
+# Documentation
+## Setup
 1. Clone the Project Sidewalk repository into the `website` folder of this directory.
 2. Obtain a database dump. Name it `sidewalk.sql` and place it into the `resources` folder.
 3. Run `docker-compose build`. This builds all the `Dockerfiles` in each service.
 4. Run `docker-compose up -d db`. You may need to run this twice (?) until the message says '`Starting sidewalk-docker_db_1 ... done`'. (For some reason, `docker-compose up` isn't working?)
 5. Run `docker exec -it sidewalk-docker_db_1 su - postgres -c "createdb -T template0 sidewalk"` then `docker exec -it sidewalk-docker_db_1 su - postgres -c "pg_restore -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql"`. 
 6. After the database is created, run `docker-compose up`. (If this doesn't work, maybe try `docker-compose up --force-recreate`)
+
+## Running (general purpose)
+1. (Optional: if no changes to ProjectSidewalk) Run `docker-compose build`.
+2. Run `docker-compose up`
+
+Assuming all is running smoothly, you expect to see see the following line: 
+```
+website_1  | (Server started, use Ctrl+D to stop and go back to the console...)
+```
+
+3. Use Ctrl+C to exit. (NOTE: Do not use `docker-compose down`)
+
+## Importing data
+1. Obtain a database dump. Name it `sidewalk.sql` and place it into the `resources` folder.
+2. Run the following commands:
+
+```
+docker-compose build db
+docker start sidewalk-docker_db_1
+```
+
+Todo: fix these commands
+```
+docker exec -it sidewalk-docker_db_1 su - postgres -c  "dropdb sidewalk"
+docker exec -it sidewalk-docker_db_1 su - postgres -c "createdb -T template0 sidewalk"
+docker exec -it sidewalk-docker_db_1 su - postgres -c "pg_restore -d sidewalk 
+docker-entrypoint-initdb.d/sidewalk.sql"
+```
+
+
+## Exporting data
+Run the following commands:
+```
+docker start sidewalk-docker_db_1
+docker exec -it sidewalk-docker_db_1 bash
+root@cc4c527d7e19:/# psql -U sidewalk
+sidewalk=# \! pg_dump -U sidewalk sidewalk -Fc -f dump.sql
+sidewalk=# \q
+exit
+docker cp sidewalk-docker_db_1:/dump.sql /host/path/target/sidewalk.sql
+```
+
+Explanation of commands:
+1. Starts the docker containers. (`docker-compose up db` is probably sufficient).
+2. Enters the bash interactive terminal in the Sidewalk database container. 
+3. Enters the postgres terminal (inside the bash terminal) as the Sidewalk user. 
+4. Dumps the sidewalk database into a file called `dump.sql` in the root directory of the database container.  
+5. Exits the postgres terminal
+6. Exits the interactive bash terminal.
+7. Copies `dump.sql` from the Docker container to `sidewalk.sql` on a path on the host machine. EX: `docker cp sidewalk-docker_db_1:/dump.sql ~/Documents/sidewalk.sql` would copy the `dump.sql` to a file called `sidewalk.sql` in the Documents folder.
 
 ## Current tasks
 1. See if there is a way to speed up website loading times. (Takes 2-3 minutes, even after the first build)
