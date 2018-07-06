@@ -19,7 +19,7 @@ Windows users *must* do the following before cloning
 
 ## General Steps
 1. Clone this repository (sidewalk-docker). Run `git clone https://github.com/aileenzeng/sidewalk-docker`.
-2. Clone the Project Sidewalk repository into the `website` folder of this directory. Check out the `593-sidewalk-docker` branch for now - this branch contains a few updates to the config files that are needed to make this project work properly with Docker. Run `git checkout 593-sidewalk-docker`.
+2. Clone the Project Sidewalk repository into the `website` folder of this directory. Check out the `593-sidewalk-docker` branch for now - this branch contains a few updates to the config files that are needed to make this project work properly with Docker. Run `git fetch` then `git checkout 593-sidewalk-docker`.
 3. Obtain a database dump. Name it `sidewalk.sql` and place it into the `resources` folder.
 4. Run `docker-compose build` in the project's root directory - this is the directory with the `docker-compose.yml` file. This command builds the `Dockerfile`s for the `website` and `db` services. This step can take ~3-4 minutes the first time. 
 5. Run `docker-compose up -d db`. You will need to run this twice until the message says '`Starting sidewalk-docker_db_1 ... done`'.
@@ -132,7 +132,8 @@ This is the updated code for `build.sbt`:
 ```
 resolvers ++= Seq(
   "geosolutions" at "http://maven.geo-solutions.it/",
-  "boundlessgeo" at "https://repo.boundlessgeo.com/main/org/"
+  "boundlessgeo" at "https://repo.boundlessgeo.com/main/",
+  "osgeo" at "http://download.osgeo.org/webdav/geotools/"
 )
 
 libraryDependencies ++= Seq(
@@ -145,7 +146,10 @@ libraryDependencies ++= Seq(
   "org.geotools" % "gt-epsg-hsql" % "14.3",
   "org.geotools" % "gt-geotiff" % "14.3",
   "org.geotools" % "gt-main" % "14.3",
-  "org.geotools" % "gt-referencing" % "14.3" exclude("javax.media", "jai_core")
+  "org.geotools" % "gt-referencing" % "14.3" excludeAll(
+        ExclusionRule(organization = "javax.media"),
+        ExclusionRule(organization = "jgridshift")
+  )
 ).map(_.force())
 ```
 
