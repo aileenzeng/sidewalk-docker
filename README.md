@@ -116,19 +116,28 @@ https://github.com/docker-library/postgres/issues/203#issuecomment-255200501
 The build command in `docker-compose` file lets you run the service from the dockerfile. You need to explicitly rebuild the container with `docker-compose build` when you have services that are using the build command in order to ensure that you are running the most recent version of each Dockerfile.
 
 ## Changes made to SidewalkWebpage
+These changes are on the `593-move-to-docker` branch.
+
 ### Fix dependencies in `/build.sbt`
-`javax.media#jai_core;1.1.3!jai_core.jar` is missing from the [Maven repository](http://repo1.maven.org/maven2/javax/media/jai_core/1.1.3/). This causes problems when `sbt compile` or `sbt run` is being built. A more detailed writeup of this issue is [here](https://github.com/aileenzeng/sidewalk-docker/issues/5). I can't figure out why these commands work when I build Sidewalk on my own computer. 
+Many `javax.media` files are missing. For example, `javax.media#jai_core;1.1.3!jai_core.jar` is missing from the [Maven repository](http://repo1.maven.org/maven2/javax/media/jai_core/1.1.3/). It is also missing from [osgeo](http://download.osgeo.org/webdav/geotools/javax/media/jai_core/1.1.3/jai_core-1.1.3.jar). Additionally, `downloads.osgeo` no longer seems to be supported. This prevents `geotools` dependencies from being downloaded. 
+
+These cause problems during `sbt compile` and `sbt run`. More detailed writeups of these issues are [here](https://github.com/aileenzeng/sidewalk-docker/issues/5) and [here](https://github.com/aileenzeng/sidewalk-docker/issues/26).
 
 To fix this, I had to modify the `build.sbt` file in Sidewalk. These changes aren't reflected in this repository since SidewalkWebpage is part of the `.gitignore` file. I haven't tried integrating this change into the Sidewalk repository that is on my computer that isn't running on Docker yet.
 
-This is the updated code for `libraryDependencies` in `build.sbt`:
+This is the updated code for `build.sbt`:
 ```
+resolvers ++= Seq(
+  "geosolutions" at "http://maven.geo-solutions.it/",
+  "boundlessgeo" at "https://repo.boundlessgeo.com/main/org/"
+)
+
 libraryDependencies ++= Seq(
   jdbc,
   (...etc...)
-  "javax.media" % "jai_core" % "1.1.3" from "http://download.osgeo.org/webdav/geotools/javax/media/jai_core/1.1.3/jai_core-1.1.3.jar",
-  "javax.media" % "jai_codec" % "1.1.3" from "http://download.osgeo.org/webdav/geotools/javax/media/jai_codec/1.1.3/jai_codec-1.1.3.jar",
-  "javax.media" % "jai_imageio" % "1.1" from "http://download.osgeo.org/webdav/geotools/javax/media/jai_imageio/1.1/jai_imageio-1.1.jar",
+  "javax.media" % "jai_core" % "1.1.3" from "http://maven.geomajas.org/nexus/content/groups/public/javax/media/jai-core/1.1.3",
+  "javax.media" % "jai_codec" % "1.1.3" from "http://maven.geomajas.org/nexus/content/groups/public/javax/media/jai_codec/1.1.3",
+  "javax.media" % "jai_imageio" % "1.1" from "http://maven.geomajas.org/nexus/content/groups/public/javax/media/jai_imageio/1.1",
   "org.geotools" % "gt-coverage" % "14.3",
   "org.geotools" % "gt-epsg-hsql" % "14.3",
   "org.geotools" % "gt-geotiff" % "14.3",

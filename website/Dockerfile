@@ -36,10 +36,6 @@ WORKDIR /root/app
 COPY ./SidewalkWebpage /root/app/
 COPY ./docker-entrypoint.sh /root/app/
 
-# Install npm dependencies
-RUN npm install
-
-
 # Compiles Scala sources and downloads dependencies. If needed, this line could be changed to 
 # RUN (sbt compile || sbt compile || sbt compile). 
 # This gives scala 3 tries to compile sources, in case there are network connectivity issues
