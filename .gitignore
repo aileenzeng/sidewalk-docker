@@ -1,5 +1,3 @@
 # ignore the database dump
 /resources/sidewalk.sql
 
-# do not include the sidewalk webpage
-/website/SidewalkWebpage
