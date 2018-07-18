@@ -30,7 +30,6 @@ $MAIL_CONTAINER_BUILD_RESULTS = FALSE; //Controls sending of docker build output
 
 $SEND_MAIL_TO = '';  //The configured email address(es), comma separated, referenced above
 
-$CONTAINER_NAME = array('dummy'); //A unique name for your container, comma separated, quotes list for multiple containers
 
 
 //** Auxiliary Configuration Section **\\

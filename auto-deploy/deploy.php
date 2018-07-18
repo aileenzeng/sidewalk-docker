@@ -4,12 +4,11 @@ require_once('config.php');
 
 /*
  * argv[1] is the path this is going to be deployed to
- * argv[2] is the container name
  */
 
-if(isset($argv[1]) && isset($argv[2])){
-	_log("Deploying $argv[2]\n");
-	deploy_container($argv[1],$argv[2]);
+if(isset($argv[1])){
+	_log("Deploying $argv[1]\n");
+	deploy_container($argv[1]);
 }
 else{
 	_log("Something went wrong\n");
@@ -17,13 +16,13 @@ else{
 
 _log("Deploy script completed\n");
 
-function deploy_container($deployto,$containername){
+function deploy_container($deployto){
 GLOBAL $MAIL_CONTAINER_BUILD_RESULTS;
 GLOBAL $SEND_MAIL_TO;
 
 $Logfile=LOG_FILE;
 
-   $cmd = "bash -c 'cd $deployto/$containername; ./rebuildanddeploy.sh $containername 2>&1'";
+   $cmd = "bash -c 'cd $deployto/; ./rebuildanddeploy.sh 2>&1'";
     _log("Exec command: $cmd\n");
     $results = shell_exec($cmd);
     if($MAIL_CONTAINER_BUILD_RESULTS){
