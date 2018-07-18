@@ -23,7 +23,12 @@ RUN apk add --update bash curl openssl ca-certificates && \
 
 RUN apk add --update nodejs
 
-RUN ls
+# NOTE: I haven't used the Activator UI, so I'm not sure if this is necessary
+# Expose 8888 for the Activator UI
+EXPOSE 8888
+
+# Expose 9000 to run locally
+EXPOSE 9000
 
 # Install grunt and npm dependencies
 RUN npm install -g grunt-cli
@@ -31,6 +36,9 @@ RUN npm install grunt
 
 # Create working directory
 WORKDIR /root/app
+
+# Copy ivy2 and misc jar caches
+COPY ./cache/ /root/
 
 # Copy code
 COPY ./SidewalkWebpage /root/app/
@@ -41,13 +49,15 @@ COPY ./docker-entrypoint.sh /root/app/
 # This gives scala 3 tries to compile sources, in case there are network connectivity issues
 # RUN sbt compile
 
-# NOTE: I haven't used the Activator UI, so I'm not sure if this is necessary
-# Expose 8888 for the Activator UI
-EXPOSE 8888
+RUN npm install
+RUN grunt concat
+RUN grunt concat_css
+RUN sbt compile
 
-# Expose 9000 to run locally
-EXPOSE 9000
+RUN ls
+#$CMD ["sbt"]
+#ENTRYPOINT ["/root/app/docker-entrypoint.sh"]
+ENTRYPOINT ["sbt"]
+CMD ["run"]
 
-CMD ["sbt"]
-ENTRYPOINT ["/root/app/docker-entrypoint.sh"]
 
