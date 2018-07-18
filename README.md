@@ -163,3 +163,5 @@ This is the updated code in `application.conf`. This can go below the `db.defaul
 # Pulls the from the DOCKER_DB environment variable from the compose file.
 db.default.url="jdbc:postgresql://"${?DOCKER_DB}"/sidewalk"
 ```
+
+trivial change
