@@ -1,3 +1,4 @@
 [submodule "website/SidewalkWebpage"]
 	path = website/SidewalkWebpage
 	url = https://github.com/mechanicjay/SidewalkWebpage.git
+        branch = 593-move-to-docker
