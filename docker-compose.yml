@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services: 
     # This service is in charge of running Project Sidewalk.
@@ -18,7 +18,6 @@ services:
             # In the absence of having named volumes with specified sources, 
             # Docker creates an anonymous volume for each task backing a service. 
             # Anonymous volumes do not persist after the associated containers are removed.
-            - sbt-cache:/root/.ivy2
             - node-modules:/root/app/node_modules
             - grunt:/usr/lib/node_modules
 
@@ -32,14 +31,14 @@ services:
 
         # Runs on localhost:9000.
         ports: 
-            - "9000:9000"
+            - "127.0.0.1:9000:9000"
 
         # may be unnecessary
         # I think docker containers still 
         networks:
             - back-tier
 
-        tty: true
+        stdin_open: true
 
     # This service is in charge of managing the database for Project Sidewalk.
     # The database that is being used is Postgres with PostGIS extensions.
