@@ -54,7 +54,6 @@ RUN grunt concat
 RUN grunt concat_css
 RUN sbt compile
 
-RUN ls
 #$CMD ["sbt"]
 #ENTRYPOINT ["/root/app/docker-entrypoint.sh"]
 ENTRYPOINT ["sbt"]
