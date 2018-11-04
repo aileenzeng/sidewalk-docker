@@ -1,4 +1,6 @@
 # Documentation:
+More extensive documentation is [here](https://docs.google.com/document/d/1IaMVVX8aVqRmjtH8u_Xq-eg5ds09t8ODcdL3YZ0TGcQ) - invite only for now!
+
 ## Prequisites
 1. Docker (18.03.1). I am using the Community Edition, version 18.03.1, which can be downloaded [here](https://store.docker.com/search?type=edition&offering=community).
 2. Docker Compose (1.21.1). NOTE: Docker for Windows/Mac already come with Docker Compose. Linux users will need to download compose separately from [here]( https://docs.docker.com/compose/install/).
@@ -56,9 +58,7 @@ docker exec -it sidewalkdocker_db_1 pg_restore -U postgres -d sidewalk docker-en
 Run the following commands:
 ```
 docker-compose up -d db
-docker exec -it sidewalkdocker_db_1 psql -U sidewalk
-sidewalk=# \! pg_dump -U sidewalk sidewalk -Fc -f dump.sql
-sidewalk=# \q
+docker exec -it sidewalkdocker_db_1 pg_dump -U sidewalk sidewalk -Fc -f dump.sql
 docker cp sidewalkdocker_db_1:/dump.sql /host/path/target/sidewalk.sql
 ```
 
