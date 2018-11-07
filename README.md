@@ -27,7 +27,7 @@ Windows users *must* do the following before cloning
 ```
 docker exec -it sidewalkdocker_db_1 createuser -U sidewalk -s postgres
 docker exec -it sidewalkdocker_db_1 createdb -T template0 -U postgres sidewalk
-docker exec -it sidewalkdocker_db_1 pg_restore -U postgres -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql
+docker exec -it sidewalkdocker_db_1 pg_restore -U postgres -d sidewalk sidewalk.sql
 ```
 
 7. After the database finishes restoring, run `docker-compose up`. (If this doesn't work, try `docker-compose up --force-recreate`. This takes care of problems related to environment variables) This step can take ~5-10 minutes the first time.
@@ -50,7 +50,7 @@ website_1  | (Server started, use Ctrl+D to stop and go back to the console...)
 ```
 docker-compose up -d db
 docker exec -it sidewalkdocker_db_1 createdb -T template0 -U postgres <database-name>
-docker exec -it sidewalkdocker_db_1 pg_restore -U postgres -d sidewalk docker-entrypoint-initdb.d/<database-file>
+docker exec -it sidewalkdocker_db_1 pg_restore -U postgres -d sidewalk <database-file>
 ```
 
 ## Exporting data
