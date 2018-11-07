@@ -10,7 +10,6 @@ services:
             # This is especially important when we are developing with Sidewalk using Docker. We don't want to be rebuilding
             # the docker container every time we make a change.
             # - ./website/SidewalkWebpage:/root/app
-
             # anonymous volume to cache project dependencies
             # https://stackoverflow.com/questions/3142856/how-to-configure-ivy-cache-directory-per-user-or-system-wide
 

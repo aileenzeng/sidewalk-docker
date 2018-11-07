@@ -23,14 +23,14 @@ Windows users *must* do the following before cloning
 3. Obtain a database dump. Name it `sidewalk.sql` and place it into the `resources` folder.
 4. Run `docker-compose build` in the project's root directory - this is the directory with the `docker-compose.yml` file. This command builds the `Dockerfile`s for the `website` and `db` services. This step can take ~3-4 minutes the first time. 
 5. Run `docker-compose up -d db`. You will need to run this twice until the message says '`Starting sidewalkdocker_db_1 ... done`'.
-6. Run the following commands:
+6. Run the following commands to create the `postgres` user and to restore the database:
 ```
-docker exec -it sidewalkdocker_db_1 createuser -s postgres
+docker exec -it sidewalkdocker_db_1 createuser -U sidewalk -s postgres
 docker exec -it sidewalkdocker_db_1 createdb -T template0 -U postgres sidewalk
 docker exec -it sidewalkdocker_db_1 pg_restore -U postgres -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql
 ```
 
-7. After the database is created, run `docker-compose up`. (If this doesn't work, try `docker-compose up --force-recreate`. This takes care of problems related to environment variables) This step can take ~5-10 minutes the first time.
+7. After the database finishes restoring, run `docker-compose up`. (If this doesn't work, try `docker-compose up --force-recreate`. This takes care of problems related to environment variables) This step can take ~5-10 minutes the first time.
 
 ## Running (general purpose)
 1. (Optional: if no changes to ProjectSidewalk) Run `docker-compose build`.
@@ -44,14 +44,13 @@ website_1  | (Server started, use Ctrl+D to stop and go back to the console...)
 3. Use Ctrl+C to exit. (NOTE: Do not use `docker-compose down`)
 
 ## Importing data
-1. Obtain a database dump. Name it `sidewalk.sql` and place it into the `resources` folder.
+1. Obtain a database dump (EX: `sidewalk.sql`) and place it into the `resources` folder.
 2. Run the following commands:
 
 ```
 docker-compose up -d db
-docker exec -it sidewalkdocker_db_1 createuser -s postgres
-docker exec -it sidewalkdocker_db_1 createdb -T template0 -U postgres sidewalk
-docker exec -it sidewalkdocker_db_1 pg_restore -U postgres -d sidewalk docker-entrypoint-initdb.d/sidewalk.sql
+docker exec -it sidewalkdocker_db_1 createdb -T template0 -U postgres <database-name>
+docker exec -it sidewalkdocker_db_1 pg_restore -U postgres -d sidewalk docker-entrypoint-initdb.d/<database-file>
 ```
 
 ## Exporting data
