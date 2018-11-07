@@ -51,10 +51,9 @@ services:
         # build the database from this container. This currently doesn't work.
 
         # Adding a volume mount should make the database persist.
-        # This solution hasn't worked so far :/
         # https://stackoverflow.com/questions/41637505/how-to-persist-data-in-a-dockerized-postgres-database-using-volumes
-        volumes:
-            - ./resources/sidewalk.sql:/docker-entrypoint-initdb.d/sidewalk.sql
+        # volumes:
+            # - ./resources/sidewalk.sql:/docker-entrypoint-initdb.d/sidewalk.sql
             # - ./resources/sidewalk.sql:/var/lib/postgresql/data/sidewalk.sql
 
         # Sets environment variables (per original Instructions)?
