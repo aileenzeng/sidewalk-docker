@@ -1,3 +1,5 @@
 # ignore the database dump
 /resources/sidewalk.sql
 
+# ignore postgres volume
+/data

@@ -52,7 +52,8 @@ services:
 
         # Adding a volume mount should make the database persist.
         # https://stackoverflow.com/questions/41637505/how-to-persist-data-in-a-dockerized-postgres-database-using-volumes
-        # volumes:
+        volumes:
+            - ./data/postgres:/var/lib/postgresql/data
             # - ./resources/sidewalk.sql:/docker-entrypoint-initdb.d/sidewalk.sql
             # - ./resources/sidewalk.sql:/var/lib/postgresql/data/sidewalk.sql
 
